@@ -1,45 +1,45 @@
 #include <complex>
 #include <iostream>
-#include "my_vector.h"
+#include "my_array.h"
 
-template <typename T>
-void print_v(const my_vector<T>& v) {
-    for (size_t i = 0; i < v.size(); i++) {
+template <typename T, size_t N>
+void print_v(const my_array<T, N>& v) {
+    for (size_t i = 0; i < N; i++) {
         std::cout << v[i] << " ";
     }
     std::cout << std::endl;
-    std::cout << "Size: " << v.size() << ", capacity: " << v.capacity() << std::endl;
 }
 int main() {
     std::cout << "====================== CONSTRUCTORS ====================" << std::endl;
-    my_vector<int> v1;
-    std::cout << "Default constructor vector ";
+    my_array<int, 0> v1;
+    std::cout << "Default constructor array ";
     print_v(v1);
 
-    my_vector<int> v2(5, 42);
-    std::cout << "v2 (5, 42): ";
+    my_array<int, 5> v2( 42);
+    std::cout << "v2 filled with 42: ";
     print_v(v2);
 
-    my_vector<int> v3{1, 2, 3, 4};
+    my_array<int, 4> v3{1, 2, 3, 4};
     std::cout << "v3 from {1, 2, 3, 4}: ";
     print_v(v3);
 
-    my_vector<int> v4(v3.begin() + 1, v3.end());
+    my_array<int, 10> v4(v3.begin() + 1, v3.end());
     std::cout << "v4 (from v3.begin + 1 till end range): ";
     print_v(v4);
 
-    my_vector<int> v5(v4);
+    my_array<int, 10> v5(v4);
     std::cout << "v5 (copy of v4): ";
     print_v(v5);
 
-    my_vector<int> v6(std::move(v5));
+    my_array<int, 10> v6(std::move(v5));
     std::cout << "v6 (moved from v5): ";
     print_v(v6);
 
-    std::cout << "v5 (after move): size = " << v5.size() << ", capacity = " << v5.capacity() << '\n';
+    std::cout << "v5 after move" << std::endl;
+    print_v(v5);
 
     std::cout << "=========================== ELEMENT ACCESS ======================" << std::endl;
-    my_vector<int> v7 {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    my_array<int, 10> v7 {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     print_v(v7);
 
     std::cout << "[3] = " << v7[3] << std::endl;
@@ -56,8 +56,8 @@ int main() {
     std::cout << "Back: " << v7.back() << std::endl;
 
     std::cout << "=============================== COMPARISON ======================" << std::endl;
-    my_vector<std::string> v8 {"i", "love", "a" };
-    my_vector<std::string> v9 {"i", "love", "b" };
+    my_array<std::string, 3> v8 {"i", "love", "a" };
+    my_array<std::string, 3> v9 {"i", "love", "b" };
 
     print_v(v8);
     print_v(v9);
@@ -84,25 +84,9 @@ int main() {
     print_v(v2);
     std::cout << "is_empty on this vector: " << v2.is_empty() << std::endl;
 
-    std::cout << "================== MEMORY MANAGMENT ==================" << std::endl;
-    my_vector<int> v10 {10};
-    print_v(v10);
-
-    std::cout << "Resize to 5" << std::endl;
-    v10.resize(5);
-    print_v(v10);
-
-    std::cout << "Reserve 20" << std::endl;
-    v10.reserve(20);
-    print_v(v10);
-
-    std::cout << "After shrink to fit" << std::endl;
-    v10.shrink_to_fit();
-    print_v(v10);
-
     std::cout << "========================= SWAP ==========================" << std::endl;
-    my_vector<int> v11 {1, 2, 3};
-    my_vector<int> v12 {4, 5, 6, 7, 8};
+    my_array<int, 5> v11 {1, 2, 3};
+    my_array<int, 5> v12 {4, 5, 6, 7, 8};
 
     std::cout << "Before swap" << std::endl;
     std::cout << "v1" << std::endl;
@@ -119,12 +103,12 @@ int main() {
     print_v(v12);
 
     std::cout << "==================== ELEMENT MANIPULATION ==================" << std::endl;
-    my_vector<int> v13 {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    my_vector<int> v14 {10, 20, 30, 40, 50};
+    my_array<int, 10> v13 {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    my_array<int, 10> v14 {10, 20, 30, 40, 50};
     std::cout << "Vector" << std::endl;
     print_v(v13);
 
-    v13.insert(v13.begin(), 123);
+    v13.insert(v13.begin() + 4, 123);
     std::cout << "After inserting 123 at v13.begin() + 4" << std::endl;
     print_v(v13);
 
@@ -142,27 +126,8 @@ int main() {
     std::cout << "After erasing at v13.begin() + 4" << std::endl;
     print_v(v13);
 
-    std::cout << "vector before pop_back, emplace_back, push_back" << std::endl;
-    print_v(v13);
-
-    v13.pop_back();
-    std::cout << "After pop_back" << std::endl;
-    print_v(v13);
-
-    v13.push_back(1000);
-    std::cout << "After push_back 1000" << std::endl;
-    print_v(v13);
-
-    my_vector<std::complex<double>> v_complex;
-
-    v_complex.emplace_back(1.0, 2.0);
-    v_complex.emplace_back(4.0, 3.5);
-    v_complex.emplace_back(10.0, -2.0);
-
-    print_v(v_complex);
-
     std::cout << "============================= ITERATORS ==================================" << std::endl;
-    my_vector<std::string> words {"one", "two", "three", "four", "five", "six"};
+    my_array<std::string, 6> words {"one", "two", "three", "four", "five", "six"};
     std::cout << "Regular print" << std::endl;
     print_v(words);
 

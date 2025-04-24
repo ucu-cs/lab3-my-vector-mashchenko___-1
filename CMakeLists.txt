@@ -59,14 +59,21 @@ add_executable(${PROJECT_NAME}vector main_v.cpp
 				options_parser/options_parser.cpp options_parser/options_parser.h
 				my_vector.h)
 
+add_executable(${PROJECT_NAME}array main_a.cpp
+				options_parser/options_parser.cpp options_parser/options_parser.h
+				my_array.h)
+
 #! Put path to your project headers
 target_include_directories(${PROJECT_NAME}vector PRIVATE options_parser)
+target_include_directories(${PROJECT_NAME}array PRIVATE options_parser)
 
 #! Add external packages
 # options_parser requires boost::program_options library
 find_package(Boost 1.71.0 COMPONENTS program_options system REQUIRED)
 target_include_directories(${PROJECT_NAME}vector PRIVATE ${Boost_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME}array PRIVATE ${Boost_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME}vector Boost::program_options Boost::system)
+target_link_libraries(${PROJECT_NAME}array Boost::program_options Boost::system)
 
 ##########################################################
 # Fixed CMakeLists.txt part
@@ -75,9 +82,13 @@ target_link_libraries(${PROJECT_NAME}vector Boost::program_options Boost::system
 INSTALL(PROGRAMS
 		$<TARGET_FILE:${PROJECT_NAME}vector> # ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
 		DESTINATION bin)
+INSTALL(PROGRAMS
+		$<TARGET_FILE:${PROJECT_NAME}array> # ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}
+		DESTINATION bin)
 
 # Define ALL_TARGETS variable to use in PVS and Sanitizers
 set(ALL_TARGETS ${PROJECT_NAME}vector)
+set(ALL_TARGETS ${PROJECT_NAME}array)
 
 # Include CMake setup
 include(cmake/main-config.cmake)
