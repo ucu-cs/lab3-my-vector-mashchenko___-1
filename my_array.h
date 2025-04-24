@@ -49,7 +49,6 @@ public:
     }
     my_array& operator=(const my_array& other) {
         if (this != &other) {
-            delete [] data_m;
             for (size_t i = 0; i < N; i++) {
                 data_m[i] = other.data_m[i];
             }
@@ -66,8 +65,9 @@ public:
     }
     my_array& operator=(my_array&& other) noexcept {
         if (this != &other) {
-            delete [] data_m;
-            data_m = other.data_m;
+            for (size_t i = 0; i < N; i++) {
+                data_m[i] = other.data_m[i];
+            }
             other.clear();
         }
         return *this;

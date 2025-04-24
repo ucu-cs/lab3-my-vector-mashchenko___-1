@@ -172,6 +172,9 @@ public:
         return size_m;
     }
     void reserve (size_t new_capacity) {
+        if (new_capacity == 0) {
+            new_capacity = 2;
+        }
         if (new_capacity > capacity_m) {
             new_capacity = align_to_16 (new_capacity);
             T* new_data_m = new T[new_capacity];
@@ -292,7 +295,7 @@ public:
 
     void push_back(const T& value) {
         if (size_m == capacity_m) {
-            reserve(size_m * 2);
+            reserve((size_m) * 2);
         }
         data_m[size_m++] = value;
     }

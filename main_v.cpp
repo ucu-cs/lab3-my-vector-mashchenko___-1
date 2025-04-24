@@ -177,5 +177,25 @@ int main() {
 
     print_v(words);
 
+    std::cout << "=================== SPECIAL CASES =============================" << std::endl;
+    my_vector<int> v{1, 2, 3};
+    print_v(v);
+
+    std::cout << "After v.push_back(v.back())" << std::endl;
+    v.push_back(v.back());
+    print_v(v);
+
+    my_vector<my_vector<int>> embed;
+    for (auto & it : embed) {
+        print_v(it);
+    }
+    std::cout << "Embedded vector size: " << embed.size() << std::endl;
+
+    embed.push_back(v);
+    for (auto & it : embed) {
+        print_v(it);
+    }
+    std::cout << "Embedded vector size: " << embed.size() << std::endl;
+
     return 0;
 }
